@@ -1,9 +1,9 @@
 from app.database import async_session_maker
-from app.dao.base import BaseService
+from app.dao.base import BaseDAO
 from sqlalchemy import select
 
 from app.descriptions.models import Descriptions
 
 
-class DescriptionsService(BaseService):
+class DescriptionsDAO(BaseDAO):
     model = Descriptions
