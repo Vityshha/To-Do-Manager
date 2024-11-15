@@ -10,6 +10,12 @@ router = APIRouter(
 )
 
 
+# По конкретному id
+# 1. Создать воркера по user_id
+# 2. Получить воркеров по id
+# 3. Изменить параметры воркера
+
+
 @router.get('')
 async def get_orders():
     async with async_session_maker() as session:

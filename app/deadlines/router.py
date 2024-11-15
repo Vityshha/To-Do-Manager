@@ -10,6 +10,12 @@ router = APIRouter(
 )
 
 
+# По конкретному id
+# 1. Записать сроки заказа
+# 2. Получить сроки заказа
+# 3. Изменить сроки заказа
+
+
 @router.get('')
 async def get_orders():
     async with async_session_maker() as session:

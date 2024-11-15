@@ -16,7 +16,12 @@ class RoleUser(Enum):
 
 @unique
 class RatingOrder(Enum):
-    TEST = 'TEST'
+    ONESTAR = 1
+    TWOSTAR = 2
+    THREESTAR = 3
+    FOURSTAR = 4
+    FIVESTAR = 5
+
 
 @unique
 class DoorsLoops(Enum):
@@ -25,6 +30,10 @@ class DoorsLoops(Enum):
 @unique
 class OrderStatus(Enum):
     TEST = 'TEST'
+    PAIDFOR = 'PAIDFOR'
+    DECORATION = 'DECORATION'
+    INPROGRESS = 'INPROGRESS'
+    DONE = 'DONE'
 
 @unique
 class OrderComplexity(Enum):
