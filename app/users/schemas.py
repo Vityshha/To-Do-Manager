@@ -4,7 +4,7 @@ from app.enums import RoleUser
 
 
 
-class SUserRegister(BaseModel):
+class SUserAuth(BaseModel):
     email: EmailStr
     password: str
     role: RoleUser

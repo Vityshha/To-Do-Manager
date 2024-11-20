@@ -1,28 +1,28 @@
-from fastapi import APIRouter
-from sqlalchemy import select
-
-from app.database import async_session_maker
-from app.users.models import Users
+from fastapi import APIRouter, HTTPException, status, Response
+from app.users.dao import UsersDAO
+from app.users.auth import get_password_hash, authenticate_user, create_access_token
+from app.users.schemas import SUserAuth
 
 router = APIRouter(
-    prefix='/users',
-    tags=['users'],
+    prefix='/auth',
+    tags=['Auth'],
 )
 
-# 1. Создать юзера
-# 2. Удалить юзера
-# 3. Отредактировать юзера
-# 4. Поставить аватарку
-# 5. Как то прописать логику ролей
-# 6. Хэшировать пароль
-# 7. У юзера должна быть история заказов (воркер он или клиент)
-# 8. ...
+
+@router.post('/register')
+async def register_user(user_data: SUserAuth):
+    existing_user = await UsersDAO.find_one_or_none(email=user_data.email)
+    if existing_user:
+        raise HTTPException(status_code=500)
+    hashed_password = get_password_hash(user_data.password)
+    await UsersDAO.add(email=user_data.email, password=hashed_password)
 
 
-@router.get('')
-async def get_orders():
-    async with async_session_maker() as session:
-        query = select(Users)
-        result = await session.execute(query)
-        return result.scalars().all()
-
+@router.post('/login')
+async def login_user(response: Response, user_data: SUserAuth):
+    user = await authenticate_user(user_data.email, user_data.password)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+    access_token = create_access_token({'sub': user.id})
+    response.set_cookie('acces_token', access_token, httponly=True)
+    return {'access_token': access_token}
