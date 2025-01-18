@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.tasks.dao import DescriptionsDAO
+from app.tasks.dao import TasksDAO
 from app.tasks.schemas import STasks
 
 router = APIRouter(
@@ -12,6 +12,6 @@ router = APIRouter(
 
 @router.get('')
 async def get_descriptions() -> list[STasks]:
-    results = await DescriptionsDAO.find_all()
+    results = await TasksDAO.find_all()
     return results
 
