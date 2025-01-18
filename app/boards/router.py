@@ -2,24 +2,18 @@ from fastapi import APIRouter
 from sqlalchemy import select
 
 from app.database import async_session_maker
-from app.deadlines.models import Deadlines
+from app.boards.models import Boards
 
 router = APIRouter(
-    prefix='/deadlines',
-    tags=['deadlines'],
+    prefix='/boards',
+    tags=['Boards'],
 )
-
-
-# По конкретному id
-# 1. Записать сроки заказа
-# 2. Получить сроки заказа
-# 3. Изменить сроки заказа
 
 
 @router.get('')
 async def get_orders():
     async with async_session_maker() as session:
-        query = select(Deadlines)
+        query = select(Boards)
         result = await session.execute(query)
         return result.scalars().all()
 

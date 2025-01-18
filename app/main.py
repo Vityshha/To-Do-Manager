@@ -1,23 +1,28 @@
 from fastapi import FastAPI
+import uvicorn
 
-
-from app.workers.router import router as router_workers
+from app.images.router import router as router_images
 from app.users.router import router as router_register
 from app.users.router import router as router_users
-from app.reviews.router import router as router_reviews
-from app.orders.router import router as router_orders
-from app.descriptions.router import router as router_descriptions
-from app.deadlines.router import router as router_deadlines
+from app.columns.router import router as router_columns
+from app.board_members.router import router as router_board_members
+from app.tasks.router import router as router_tasks
+from app.boards.router import router as router_boards
 
-app = FastAPI()
+app = FastAPI(title='To-Do-Manager')
 
 
-app.include_router(router_workers)
+app.include_router(router_images)
 app.include_router(router_register)
 app.include_router(router_users)
-app.include_router(router_reviews)
-app.include_router(router_orders)
-app.include_router(router_descriptions)
-app.include_router(router_deadlines)
+app.include_router(router_columns)
+app.include_router(router_board_members)
+app.include_router(router_tasks)
+app.include_router(router_boards)
+
+
+
+if __name__ == '__main__':
+    uvicorn.run("app.main:app", host="127.0.0.1", port=8000, reload=True)
 
 
