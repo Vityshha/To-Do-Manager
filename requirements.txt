@@ -11,3 +11,6 @@ pydantic[email]
 asyncpg
 passlib
 python-jose
+greenlet
+bcrypt
+

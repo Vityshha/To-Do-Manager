@@ -1,16 +1,36 @@
 from pydantic import BaseModel
 from app.enums import TasksStatus
-from datetime import datetime
+from datetime import date, datetime
+from typing import Optional
+
 
 class STasks(BaseModel):
     id: int
     title: str
-    description: str
+    description: Optional[str]
     status: TasksStatus
-    deadline: datetime
+    deadline: Optional[date]
     created_at: datetime
     column_id: int
     position: int
 
     class Config:
         from_attributes = True
+
+
+class STaskCreate(BaseModel):
+    title: str
+    description: Optional[str]
+    status: TasksStatus
+    deadline: Optional[date]
+    column_id: int
+    position: int
+
+
+class STaskUpdate(BaseModel):
+    title: Optional[str]
+    description: Optional[str]
+    status: Optional[TasksStatus]
+    deadline: Optional[date]
+    column_id: Optional[int]
+    position: Optional[int]
