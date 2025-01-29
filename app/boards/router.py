@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 from app.boards.dao import BoardsDAO
 from app.boards.schemas import SBoards, SBoardCreate, SBoardUpdate
+from datetime import datetime
 
 router = APIRouter(
     prefix='/boards',

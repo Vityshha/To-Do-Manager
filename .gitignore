@@ -54,6 +54,8 @@ cover/
 
 *.DS_Store
 
+uploads
+
 
 # Translations
 *.mo

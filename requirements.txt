@@ -13,4 +13,4 @@ passlib
 python-jose
 greenlet
 bcrypt
-
+python-multipart

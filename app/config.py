@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
 
+    UPLOAD_DIR: str
+
 
     @root_validator
     def get_database_url(cls, data):
