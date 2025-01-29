@@ -1,5 +1,6 @@
-from fastapi import APIRouter, HTTPException, status, Response
+from fastapi import APIRouter, HTTPException, status, Response, UploadFile, File
 from app.users.dao import UsersDAO
+from app.images.dao import ImagesDAO
 from app.users.auth import get_password_hash, authenticate_user, create_access_token
 from app.users.schemas import SUserLogin, SUserRegister
 from datetime import date
@@ -20,9 +21,9 @@ async def register_user(user_data: SUserRegister):
     await UsersDAO.add(
         email=user_data.email,
         hashed_password=hashed_password,
-        first_name=user_data.first_name or "",
-        last_name=user_data.last_name or "",
-        image_id=user_data.image_id if user_data.image_id is not None else 0,
+        first_name=user_data.first_name or None,
+        last_name=user_data.last_name or None,
+        image_id=user_data.image_id if user_data.image_id is not None else None,
         created_at=date.today()
     )
     return {"detail": "User successfully registered"}
@@ -77,3 +78,40 @@ async def delete_user(user_id: int):
 
     await UsersDAO.delete(user_id)
     return {"detail": "User successfully deleted"}
+
+
+@router.post('/users/{user_id}/avatar')
+async def add_avatar(user_id: int, file: UploadFile = File(...)):
+    user = await UsersDAO.find_by_id(user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    image = await ImagesDAO.upload_image(file)
+    await UsersDAO.update(user_id, image_id=image["image_id"])
+
+    return {"detail": "Avatar added successfully"}
+
+@router.put('/users/{user_id}/avatar')
+async def update_avatar(user_id: int, file: UploadFile = File(...)):
+    user = await UsersDAO.find_by_id(user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    image = await ImagesDAO.update_image(user.image_id, file)
+
+    await UsersDAO.update(user_id, image_id=image["image_id"])
+
+    return {"detail": "Avatar updated successfully", "filename": image["filename"], "path": image["path"]}
+
+@router.delete('/users/{user_id}/avatar')
+async def delete_avatar(user_id: int):
+    user = await UsersDAO.find_by_id(user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    if user.image_id != 0:
+        await ImagesDAO.delete_image(user.image_id)
+        #todo нужно в models image_id ссылаться на таблицу image.id
+        await UsersDAO.update(user_id, image_id=None)
+
+    return {"detail": "Avatar deleted successfully"}

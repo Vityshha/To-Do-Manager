@@ -34,6 +34,15 @@ class BaseDAO:
             await session.commit()
 
     @classmethod
+    async def add_image(cls, **data):
+        async with async_session_maker() as session:
+            query = insert(cls.model).values(**data).returning(cls.model.id)
+            result = await session.execute(query)
+            await session.commit()
+            image_id = result.scalar()
+            return {**data, "image_id": image_id}
+
+    @classmethod
     async def update(cls, model_id: int, **data):
         async with async_session_maker() as session:
             query = update(cls.model).where(cls.model.id == model_id).values(**data)

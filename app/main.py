@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 import uvicorn
 
-from app.images.router import router as router_images
 from app.users.router import router as router_register
 from app.users.router import router as router_users
 from app.columns.router import router as router_columns
@@ -12,7 +11,6 @@ from app.boards.router import router as router_boards
 app = FastAPI(title='To-Do-Manager')
 
 
-app.include_router(router_images)
 app.include_router(router_register)
 app.include_router(router_users)
 app.include_router(router_columns)
