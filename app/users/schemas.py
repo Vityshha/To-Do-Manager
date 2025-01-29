@@ -1,34 +1,23 @@
 from pydantic import BaseModel, EmailStr
 from datetime import date
+from typing import Optional
 
 
-class SUserAuth(BaseModel):
+class SUserLogin(BaseModel):
     email: EmailStr
     hashed_password: str
-    created_at: date
-    first_name: str
-    last_name: str
-    image_id: int
+    created_at: date = date.today()
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    image_id: Optional[int] = None
 
     class Config:
         from_attributes = True
 
 
-class SUserCreate(BaseModel):
+class SUserRegister(BaseModel):
     email: EmailStr
-    password: str  # Пароль без хэширования
-    first_name: str
-    last_name: str
-    image_id: int
-
-
-class SUserResponse(BaseModel):
-    id: int
-    email: EmailStr
-    created_at: date
-    first_name: str
-    last_name: str
-    image_id: int
-
-    class Config:
-        from_attributes = True
+    password: str
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    image_id: Optional[int] = None
