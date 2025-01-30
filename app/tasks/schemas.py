@@ -13,6 +13,7 @@ class STasks(BaseModel):
     created_at: Optional[date] = None
     column_id: int
     position: int
+    image_id: Optional[int] = None
 
     class Config:
         from_attributes = True
@@ -25,6 +26,7 @@ class STaskCreate(BaseModel):
     deadline: Optional[date] = None
     column_id: int
     position: int
+    image_id: Optional[int] = None
 
 
 class STaskUpdate(BaseModel):
@@ -34,3 +36,4 @@ class STaskUpdate(BaseModel):
     deadline: Optional[date]
     column_id: Optional[int]
     position: Optional[int]
+    image_id: Optional[int] = None

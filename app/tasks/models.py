@@ -14,3 +14,4 @@ class Tasks(Base):
     created_at = Column(Date, default=datetime.now)
     column_id = Column(ForeignKey('columns.id'), nullable=False)
     position = Column(Integer, nullable=False)
+    image_id = Column(Integer, nullable=True)

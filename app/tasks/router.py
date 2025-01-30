@@ -1,5 +1,6 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, File, UploadFile
 from app.tasks.dao import TasksDAO
+from app.images.dao import ImagesDAO
 from app.tasks.schemas import STasks, STaskCreate, STaskUpdate
 from datetime import date, datetime
 
@@ -49,3 +50,41 @@ async def delete_task(task_id: int):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found.")
     await TasksDAO.delete(task_id)
     return {"detail": "Task successfully deleted."}
+
+
+
+@router.post('/{task_id}/image')
+async def add_image(task_id: int, file: UploadFile = File(...)):
+    task = await TasksDAO.find_by_id(task_id)
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+
+    image = await ImagesDAO.upload_image(file)
+    await TasksDAO.update(task_id, image_id=image["image_id"])
+
+    return {"detail": "Image added successfully"}
+
+@router.put('/{task_id}/image')
+async def update_image(task_id: int, file: UploadFile = File(...)):
+    task = await TasksDAO.find_by_id(task_id)
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+
+    image = await ImagesDAO.update_image(task.image_id, file)
+
+    await TasksDAO.update(task_id, image_id=image["image_id"])
+
+    return {"detail": "Image updated successfully", "filename": image["filename"], "path": image["path"]}
+
+@router.delete('/{task_id}/image')
+async def delete_imsge(task_id: int):
+    task = await TasksDAO.find_by_id(task_id)
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+
+    if task.image_id != 0:
+        await ImagesDAO.delete_image(task.image_id)
+        #todo нужно ссылаться на таблицу image.id
+        await TasksDAO.update(task_id, image_id=None)
+
+    return {"detail": "Image deleted successfully"}
