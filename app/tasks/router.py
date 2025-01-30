@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException, status
 from app.tasks.dao import TasksDAO
 from app.tasks.schemas import STasks, STaskCreate, STaskUpdate
+from datetime import date, datetime
+
 
 router = APIRouter(
     prefix='/tasks',
@@ -10,7 +12,10 @@ router = APIRouter(
 
 @router.post('/', response_model=STasks, status_code=status.HTTP_201_CREATED)
 async def create_task(task_data: STaskCreate):
-    task = await TasksDAO.add(**task_data.dict())
+    task_data_dict = task_data.dict()
+    task_data_dict['created_at'] = datetime.now()
+    task_data_dict['deadline'] = None
+    task = await TasksDAO.added_task(**task_data_dict)
     return task
 
 

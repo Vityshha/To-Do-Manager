@@ -20,3 +20,12 @@ class TasksDAO(BaseDAO):
             query = select(cls.model).filter_by(status=status)
             result = await session.execute(query)
             return result.scalars().all()
+
+    @classmethod
+    async def added_task(cls, **data):
+        async with async_session_maker() as session:
+            task = cls.model(**data)
+            session.add(task)
+            await session.commit()
+            await session.refresh(task)
+            return task

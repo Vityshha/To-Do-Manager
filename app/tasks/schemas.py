@@ -9,8 +9,8 @@ class STasks(BaseModel):
     title: str
     description: Optional[str]
     status: TasksStatus
-    deadline: Optional[date]
-    created_at: datetime
+    deadline: Optional[date] = None
+    created_at: Optional[date] = None
     column_id: int
     position: int
 
@@ -22,7 +22,7 @@ class STaskCreate(BaseModel):
     title: str
     description: Optional[str]
     status: TasksStatus
-    deadline: Optional[date]
+    deadline: Optional[date] = None
     column_id: int
     position: int
 
