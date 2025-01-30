@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
 from app.columns.dao import ColumnsDAO
+from app.boards.dao import BoardsDAO
 from app.columns.schemas import SColumns, SColumnCreate, SColumnUpdate
 
 router = APIRouter(
@@ -10,8 +11,12 @@ router = APIRouter(
 
 @router.post('/', response_model=SColumns, status_code=status.HTTP_201_CREATED)
 async def create_column(column_data: SColumnCreate):
-    column = await ColumnsDAO.add(**column_data.dict())
-    return column
+    board = await BoardsDAO.find_by_id(column_data.board_id)
+    if not board:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Board not found.")
+
+    new_column = await ColumnsDAO.add_columns(**column_data.dict())
+    return SColumns.from_orm(new_column)
 
 
 @router.get('/', response_model=list[SColumns])

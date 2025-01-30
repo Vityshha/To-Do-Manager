@@ -8,7 +8,7 @@ class SColumns(BaseModel):
     name: str
     board_id: int
     position: int
-    created_at: Optional[datetime]
+    created_at: Optional[datetime] = datetime.now()
 
     class Config:
         from_attributes = True
@@ -18,7 +18,7 @@ class SColumnCreate(BaseModel):
     name: str
     board_id: int
     position: int
-
+    created_at: Optional[datetime] = datetime.now()
 
 class SColumnUpdate(BaseModel):
     name: Optional[str]
