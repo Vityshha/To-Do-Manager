@@ -14,8 +14,10 @@ async def create_board(board_data: SBoardCreate):
     existing_board = await BoardsDAO.find_by_name(board_data.name)
     if existing_board:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Board with this name already exists.")
-    board = await BoardsDAO.add(name=board_data.name, created_at=datetime.utcnow())
-    return board
+
+    new_board = await BoardsDAO.add_board(name=board_data.name, created_at=datetime.utcnow())
+    return new_board
+
 
 
 @router.get('/', response_model=list[SBoards])
