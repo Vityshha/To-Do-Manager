@@ -43,6 +43,13 @@ async def login_user(response: Response, user_data: SUserLogin):
     return {'access_token': access_token}
 
 
+@router.post('/logout')
+async def logout_user(response: Response):
+    response.delete_cookie('access_token')
+    return {"detail": "User successfully logged out"}
+
+
+
 @router.get('/users')
 async def get_users():
     users = await UsersDAO.find_all()
