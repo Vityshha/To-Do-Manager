@@ -11,7 +11,7 @@ To-Do-Manager - это система управления задачами, р�
 2. SQLAlchemy
 3. Alembic 
 4. pdAdmin 
-5. Python 3.11 и выше
+5. Python 3.11
 6. PostgreSQL 
 7. Docker
 
